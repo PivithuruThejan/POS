@@ -2,8 +2,25 @@
   "name": "node-api",
   "main": "server.js",
   "dependencies": {
+    "@reach/router": "^1.2.1",
+    "axios": "^0.18.0",
     "body-parser": "~1.0.1",
     "express": "~4.0.0",
-    "mongoose": "^4.2.6"
+    "mongoose": "^4.2.6",
+    "password-validator": "^4.1.1",
+    "react": "^16.7.0",
+    "react-dom": "^16.7.0",
+    "react-router-dom": "^4.3.1",
+    "validator": "^10.11.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "parcel-bundler": "^1.11.0",
+    "prettier": "^1.16.0"
+  },
+  "scripts": {
+    "dev": "parcel index.html"
   }
 }
