@@ -189,7 +189,75 @@ router.route("/order").put(function(req, res) {
   });
 });
 
+router.route("/orders").get(function(req, res) {
+  var token = req.headers["authorization"];
+  jwt.verify(token, "secret", function(err, user) {
+    if (err) {
+      res.send("Access Denied Please Log Again!");
+    } else {
+      User.findOne({ email: user.email }, function(err, newUser) {
+        if (err) {
+          res.send("Failed to find the User!");
+        } else {
+          res.send(newUser.orderList);
+        }
+      });
+    }
+  });
+});
+function datafetch(item_id) {
+  return new Promise((resolve, reject) => {
+    Item.findById(item_id, (err, item) => {
+      if (err) reject(err);
+      else {
+        resolve(item);
+      }
+    });
+  });
+}
 router.route("/order/:order_id").get(function(req, res) {
+  var order_id = req.params.order_id;
+  var token = req.headers["authorization"];
+  jwt.verify(token, "secret", function(err, user) {
+    if (err) {
+      res.send("Access Denied Please Log Again!");
+    } else {
+      Order.findById(order_id, function(err, order) {
+        if (err) {
+          res.send("Failed to Find the Order!");
+        } else {
+          if (order.itemList[0] != null) {
+            let items = order.itemList[0];
+            if (!Array.isArray(items)) {
+              items = items.slice(1, -1);
+              items = items.split(",");
+            }
+            let temp = [];
+            for (let i = 0; i < items.length; i++) {
+              let item_id = items[i].trim();
+              datafetch(item_id)
+                .then(item => {
+                  temp.push(item);
+                  if (temp.length == items.length) {
+                    res.send(temp);
+                  }
+                  //console.log(temp);
+                })
+                .catch(err => {
+                  console.log(err);
+                });
+            }
+          } else {
+            let temp = [];
+            res.send(temp);
+          }
+        }
+      });
+    }
+  });
+});
+
+router.route("/orderDetails/:order_id").get(function(req, res) {
   var order_id = req.params.order_id;
   var token = req.headers["authorization"];
   jwt.verify(token, "secret", function(err, user) {

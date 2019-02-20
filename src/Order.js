@@ -1,5 +1,6 @@
 import React from "react";
 import { navigate, Redirect } from "@reach/router";
+import itemList from "../resources/items.json";
 
 class Order extends React.Component {
   logout(event) {
@@ -19,6 +20,7 @@ class Order extends React.Component {
       marginLeft: "80%"
     };
     let cardStyle = { width: "18rem" };
+    console.log(itemList[0].name);
     if (!localStorage.token) {
       return <Redirect to="/" noThrow />;
     } else {
